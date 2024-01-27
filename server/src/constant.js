@@ -1,0 +1,1 @@
+export const DB_Name = 'real_estate_project'
