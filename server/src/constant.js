@@ -1,1 +1,2 @@
-export const DB_Name = 'real_estate_project'
+// mongoDB database name
+export const MongoDB_Name = 'real_estate_project'

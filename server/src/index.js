@@ -5,6 +5,8 @@ config({
 import connectDB from "./db/mongodbconnection.js";
 import {app} from './app.js';
 
+
+// MongoDB Database connection call
 connectDB().then(()=>{
   
   app.listen(process.env.PORT, () => {

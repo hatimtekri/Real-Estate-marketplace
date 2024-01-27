@@ -19,11 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.get("/test", (req, res) => {
-  res.send("Hello World");
-});
 
-app.use("/test-route", TestRoute);
+
+// routes 
+app.use("/test-route", TestRoute); 
 
 
 // global error handling
