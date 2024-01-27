@@ -2,7 +2,7 @@ import { config } from "dotenv";
 config({
   path: "./env",
 });
-import connectDB from "./db/dbconnection.js";
+import connectDB from "./db/mongodbconnection.js";
 import {app} from './app.js';
 
 connectDB().then(()=>{

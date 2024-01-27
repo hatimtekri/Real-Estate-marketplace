@@ -1,3 +1,6 @@
+import { ApiError } from "../utils/ApiError.js"
+
 export const getTestData = (req,res)=>{
-    res.send("test routing working")
+   //throw new ApiError()
+     res.send("test routing working")
 }
