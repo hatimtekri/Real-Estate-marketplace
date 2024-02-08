@@ -1,4 +1,4 @@
-const asyncErrorHandler = (routeHandler) => async (req, res, next) => {
+export const asyncErrorHandler = (routeHandler) => async (req, res, next) => {
   try {
     await routeHandler(req, res, next);
   } catch (error) {
