@@ -3,7 +3,9 @@ import TestRoute from "./routes/Test.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware.js";
-import path from 'path'
+import path from 'path';
+import userRoute from './routes/user.route.js'
+import authRoute from './routes/auth.route.js'
 const app = express();
 
 
@@ -27,7 +29,8 @@ app.set("trust proxy", true);
 
 // routes 
 app.use("/test-route", TestRoute); 
-
+app.use("/api/user",userRoute)
+app.use("/api/auth",authRoute)
 
 // global error handling
 app.use(errorHandler)
