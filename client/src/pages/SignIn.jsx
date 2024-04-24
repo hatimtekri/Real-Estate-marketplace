@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { getAxios, postAxios } from "../utils/Axios";
+import { useDispatch, useSelector } from "react-redux";
+import { signInFailure, signInSuccess, signInStart } from "../redux/userSlice";
 
 function SignIn() {
   const form = useForm({
@@ -12,30 +14,29 @@ function SignIn() {
   });
 
   const { register, handleSubmit } = form;
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const onSubmit = async (formData) => {
     console.log("on submit");
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await postAxios("/api/auth/signin", {
         ...formData,
       });
       const data = res;
-      console.log(data);
+
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      console.log({ error });
+      dispatch(signInFailure(error.message));
     }
   };
   return (
@@ -46,7 +47,6 @@ function SignIn() {
         noValidate
         className="flex flex-col gap-4"
       >
-       
         <input
           type="email"
           placeholder="email"
