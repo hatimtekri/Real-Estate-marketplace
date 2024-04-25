@@ -8,10 +8,12 @@ const Axios = axios.create({
 // Request interceptor
 Axios.interceptors.request.use(
   async function (config) {
-    // Do something before request is sent
-    console.log("Request intercepted:", config);
-    // For example, you can add an authorization token
-    config.headers.Authorization = await getToken();
+    const accessToken = Cookies.get("accessToken"); // Load the access token from cookies or local storage
+
+    if (accessToken) {
+      config.headers["token"] = `${accessToken}`;
+    }
+
     return config;
   },
   function (error) {

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { getAxios, postAxios } from "../utils/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import { signInFailure, signInSuccess, signInStart } from "../redux/userSlice";
+import Cookies from "js-cookie";
 
 function SignIn() {
   const form = useForm({
@@ -32,6 +33,7 @@ function SignIn() {
         dispatch(signInFailure(data.message));
         return;
       }
+      Cookies.set("access_token");
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
