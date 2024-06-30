@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Cookies from 'js-cookie'
 // Create an instance of axios with baseURL configured
 const Axios = axios.create({
   baseURL: "http://localhost:8000/", // Replace this with your base URL
@@ -8,8 +8,8 @@ const Axios = axios.create({
 // Request interceptor
 Axios.interceptors.request.use(
   async function (config) {
-    const accessToken = Cookies.get("accessToken"); // Load the access token from cookies or local storage
-
+    const accessToken = Cookies.get("access_token"); // Load the access token from cookies or local storage
+console.log("token - ",accessToken)
     if (accessToken) {
       config.headers["token"] = `${accessToken}`;
     }

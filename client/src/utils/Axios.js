@@ -10,10 +10,12 @@ export const getAxios = async (endpoint, params) => {
 };
 
 export const postAxios = async (endpoint, data) => {
+  console.log({endpoint,data})
   try {
     const response = await Axios.post(endpoint, data);
     return response.data;
   } catch (error) {
+    console.log({error})
     throw error.response.data;
   }
 };

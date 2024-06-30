@@ -1,7 +1,17 @@
 import React, { useRef } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+} from "../redux/userSlice";
 import { Link } from "react-router-dom";
+import { deleteAxios, postAxios } from "../utils/Axios";
+import Cookies from "js-cookie";
 
 function Profile() {
   const fileRef = useRef(null);
@@ -14,10 +24,41 @@ function Profile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
 
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setFormData((formData) => ({ ...formData, [e.target.id]: e.target.value }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+
+      const data = await postAxios(`/api/user/update/${currentUser._id}`, {
+        ...formData,
+      });
+
+      dispatch(updateUserSuccess(data));
+    } catch (e) {
+      dispatch(updateUserFailure(error?.response?.data?.message));
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const data = await deleteAxios(`/api/user/delete/${currentUser._id}`);
+      Cookies.remove("access_token");
+      dispatch(deleteUserSuccess());
+    } catch (e) {
+      dispatch(deleteUserFailure(e.response.data.message));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form onSubmit={() => {}} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
@@ -50,7 +91,7 @@ function Profile() {
           defaultValue={currentUser.username}
           id="username"
           className="border p-3 rounded-lg"
-          onChange={() => {}}
+          onChange={handleChange}
         />
         <input
           type="email"
@@ -58,12 +99,13 @@ function Profile() {
           id="email"
           defaultValue={currentUser.email}
           className="border p-3 rounded-lg"
-          onChange={() => {}}
+          onChange={handleChange}
         />
         <input
           type="password"
           placeholder="password"
-          onChange={() => {}}
+          defaultValue={currentUser.password}
+          onChange={handleChange}
           id="password"
           className="border p-3 rounded-lg"
         />
@@ -81,7 +123,10 @@ function Profile() {
         </Link>
       </form>
       <div className="flex justify-between mt-5">
-        <span onClick={() => {}} className="text-red-700 cursor-pointer">
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
           Delete account
         </span>
         <span onClick={() => {}} className="text-red-700 cursor-pointer">

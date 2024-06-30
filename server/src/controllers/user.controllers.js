@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { errorHandler } from "../middlewares/error.middleware.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncErrorHandler } from "../utils/asyncErrorHandler.js";
@@ -36,4 +37,16 @@ export const updateUser = asyncErrorHandler(async (req, res) => {
 
     res.json(rest);
   } catch (e) {}
+});
+
+export const deleteUser = asyncErrorHandler(async (req, res, next) => {
+  if (req.tokenUser.id !== req.params.id) {
+    return next(errorHandler(401, "you can only delete your own account"));
+  }
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "User has been deleted!" });
+  } catch (error) {
+    next(error);
+  }
 });

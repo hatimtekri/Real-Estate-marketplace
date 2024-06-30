@@ -17,9 +17,11 @@ function SignUp() {
   const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
-    console.log("on submit");
+    console.log("on submit - ",formData);
+
     try {
       setLoading(true);
+
       const res = await postAxios("/api/auth/signup", {
         ...formData,
       });
@@ -34,6 +36,7 @@ function SignUp() {
       setError(null);
       navigate("/sign-in");
     } catch (error) {
+      console.log({error})
       setLoading(false);
       setError(error.message);
     }

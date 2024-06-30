@@ -33,7 +33,8 @@ function SignIn() {
         dispatch(signInFailure(data.message));
         return;
       }
-      Cookies.set("access_token");
+      console.log({data})
+      Cookies.set("access_token",data.token);
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
